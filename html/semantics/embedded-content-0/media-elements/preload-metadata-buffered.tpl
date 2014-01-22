@@ -38,7 +38,6 @@ tests.forEach(function(vars) {
 	    t.step(function() {
 		assert_equals(node.buffered.length, 1, "'buffered' should have a length of 1");
 		assert_equals(node.buffered.start(0), 0, "The start of buffered timerange should be 0");
-		assert_true(node.buffered.end(0) < $max_buffer, "The end of buffered timerange should be less than $max_buffer seconds" );
 		t.done();
 	    });
 	}
