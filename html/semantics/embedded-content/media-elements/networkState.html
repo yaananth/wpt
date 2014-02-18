@@ -1,0 +1,35 @@
+<!doctype html>
+<title>networkState</title>
+<script src=/resources/testharness.js></script>
+<script src=/resources/testharnessreport.js></script>
+<script src=/common/media.js></script>
+<div id=log></div>
+<script>
+function t(tagName, src) {
+  test(function() {
+    var e = document.createElement(tagName);
+    assert_equals(e.networkState, e.NETWORK_EMPTY);
+  }, tagName + '.networkState is intially NETWORK_EMPTY');
+
+  test(function() {
+    var e = document.createElement(tagName);
+    e.load();
+    assert_equals(e.networkState, e.NETWORK_NO_SOURCE);
+  }, tagName + '.networkState is NETWORK_NO_SOURCE after load()');
+
+  async_test(function(t) {
+    var e = document.createElement(tagName);
+    e.src = src;
+    e.onloadstart = t.step_func(function() {
+      assert_equals(e.networkState, e.NETWORK_LOADING);
+      e.onprogress = t.step_func(function() {
+        assert_equals(e.networkState, e.NETWORK_LOADING);
+        t.done();
+      });
+    });
+  }, tagName + '.networkState is NETWORK_LOADING during loadstart and first progress event');
+}
+
+t('audio', getAudioURI('/media/sound_5') + '?pipe=trickle(10000:d1:r2)');
+t('video', getAudioURI('/media/movie_300') + '?pipe=trickle(100000:d1:r2)');
+</script>
