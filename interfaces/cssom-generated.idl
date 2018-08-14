@@ -1,0 +1,17 @@
+// https://drafts.csswg.org/cssom/#the-cssstyledeclaration-interface
+//
+// partial interface CSSStyleDeclaration {
+//   [CEReactions] attribute [TreatNullAs=EmptyString] CSSOMString _camel_cased_attribute;
+// };
+//
+// partial interface CSSStyleDeclaration {
+//   [CEReactions] attribute [TreatNullAs=EmptyString] CSSOMString _webkit_cased_attribute;
+// };
+//
+// partial interface CSSStyleDeclaration {
+//   [CEReactions] attribute [TreatNullAs=EmptyString] CSSOMString _dashed_attribute;
+// };
+
+partial interface CSSStyleDeclaration {
+  [CEReactions] attribute [TreatNullAs=EmptyString] CSSOMString display;
+};
