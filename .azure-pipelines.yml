@@ -15,7 +15,15 @@ jobs:
     fetchDepth: 2
     submodules: false
 
-  - script: git log --oneline --decorate
+  - script: |
+      echo "HEAD:"
+      git log -1 HEAD
+      echo "HEAD^1:"
+      git log -1 HEAD^1
+      echo "HEAD^2:"
+      git log -1 HEAD^2
+      echo "full log:"
+      git log --oneline --decorate
     displayName: 'git log'
 
   - script: |
