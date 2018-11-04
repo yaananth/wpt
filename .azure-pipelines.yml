@@ -12,8 +12,11 @@ jobs:
 
   steps:
   - checkout: self
-    fetchDepth: 50
+    fetchDepth: 2
     submodules: false
+
+  - script: git log --oneline --decorate
+    displayName: 'git log'
 
   - script: |
       echo "Test jobs:"
