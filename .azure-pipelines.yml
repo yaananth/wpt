@@ -17,11 +17,11 @@ jobs:
 
   - script: |
       echo "HEAD:"
-      git log -1 HEAD
+      git log -1 --decorate HEAD
       echo "HEAD^1:"
-      git log -1 HEAD^1
+      git log -1 --decorate HEAD^1
       echo "HEAD^2:"
-      git log -1 HEAD^2
+      git log -1 --decorate HEAD^2
       echo "All commits:"
       git log --oneline --decorate
     displayName: 'git log'
