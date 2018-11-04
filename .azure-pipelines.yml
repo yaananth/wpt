@@ -12,7 +12,7 @@ jobs:
 
   steps:
   - checkout: self
-    fetchDepth: 2
+    fetchDepth: 1
     submodules: false
 
   - script: |
