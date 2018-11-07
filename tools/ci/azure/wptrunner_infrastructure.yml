@@ -36,11 +36,11 @@ jobs:
     parameters:
       os: ${{ parameters.os }}
 
-  - script: ./wpt make-hosts-file | sudo tee -a /etc/hosts
-    displayName: 'Update /etc/hosts'
+  - template: update_hosts.yml
+    parameters:
+      os: ${{ parameters.os }}
 
-  - script: ./wpt manifest
-    displayName: 'Update manifest'
+  - template: update_manifest.yml
 
   - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=dev chrome infrastructure/
     displayName: 'Run infrastructure/ tests (Chrome Dev)'
