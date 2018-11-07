@@ -1,0 +1,54 @@
+parameters:
+  name: ''
+  vmImage: ''
+  displayName: ''
+  dependsOn: ''
+  condition: ''
+
+jobs:
+- job: ${{ parameters.name }}
+  displayName: ${{ parameters.displayName }}
+  dependsOn: ${{ parameters.dependsOn }}
+  condition: ${{ parameters.condition }}
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+  steps:
+  - checkout: self
+    fetchDepth: 50
+    submodules: false
+
+  - script: |
+      sudo easy_install pip
+      pip install --user tox virtualenv
+      echo "##vso[task.prependpath]$HOME/Library/Python/2.7/bin"
+    displayName: 'Install Python packages'
+
+  # Installig Ahem in /Library/Fonts instead of using --install-fonts is a
+  # workaround for https://github.com/web-platform-tests/wpt/issues/13803.
+  - script: sudo cp fonts/Ahem.ttf /Library/Fonts
+    displayName: 'Install Ahem font'
+    condition: variables.run_wptrunner_infrastructure
+
+  - script: |
+      # https://github.com/web-platform-tests/results-collection/blob/master/src/scripts/trust-root-ca.sh
+      sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain tools/certs/cacert.pem
+    displayName: 'Install web-platform.test certificate'
+    condition: variables.run_wptrunner_infrastructure
+
+  - template: install-browsers.yml
+
+  - script: ./wpt make-hosts-file | sudo tee -a /etc/hosts
+    displayName: 'Update /etc/hosts'
+    condition: variables.run_wptrunner_infrastructure
+
+  - script: ./wpt manifest
+    displayName: 'Update manifest'
+
+  - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=dev chrome infrastructure/
+    displayName: 'Run infrastructure/ tests (Chrome Dev)'
+
+  - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=nightly firefox infrastructure/
+    displayName: 'Run infrastructure/ tests (Firefox Nightly)'
+
+  - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=preview safari_webdriver infrastructure/
+    displayName: 'Run infrastructure/ tests (Safari Technology Preview)'
