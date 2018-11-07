@@ -18,11 +18,9 @@ jobs:
     fetchDepth: 50
     submodules: false
 
-  - script: |
-      sudo easy_install pip
-      pip install --user virtualenv
-      echo "##vso[task.prependpath]$HOME/Library/Python/2.7/bin"
-    displayName: 'Install Python packages'
+  - template: install_virtualenv.yml
+    parameters:
+      os: ${{ parameters.os }}
 
   - template: install_browsers.yml
     parameters:
