@@ -17,12 +17,10 @@ jobs:
     submodules: false
 
   - ${{ if eq(parameters.os, 'Linux') }}:
-    - script: |
-        sudo apt-get install xvfb
-        dpkg -L xvfb
+    - script: sudo apt-get install xvfb
       displayName: 'Install Xvfb'
 
-    - script: sh -e /etc/init.d/xvfb start 1>&2
+    - script: Xvfb :99 &
       displayName: 'Start Xvfb'
 
   - template: install_virtualenv.yml
