@@ -1,7 +1,5 @@
 parameters:
   os: ''
-  dependsOn: ''
-  condition: ''
 
 jobs:
 - job: 'infrastructure_${{ parameters.os }}'
@@ -22,10 +20,6 @@ jobs:
     parameters:
       os: ${{ parameters.os }}
 
-  - template: install_browsers.yml
-    parameters:
-      os: ${{ parameters.os }}
-
   - template: install_certs.yml
     parameters:
       os: ${{ parameters.os }}
@@ -41,12 +35,27 @@ jobs:
   - script: ./wpt manifest
     displayName: 'Update manifest'
 
+  - template: install_browser.yml
+    parameters:
+      os: ${{ parameters.os }}
+      browser: 'chrome'
+
   - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=dev chrome infrastructure/
     displayName: 'Run infrastructure/ tests (Chrome Dev)'
+
+  - template: install_browser.yml
+    parameters:
+      os: ${{ parameters.os }}
+      browser: 'firefox'
 
   - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=nightly firefox infrastructure/
     displayName: 'Run infrastructure/ tests (Firefox Nightly)'
 
   - {{ if eq(parameters.os, 'macOS') }}:
+    - template: install_browser.yml
+      parameters:
+        os: ${{ parameters.os }}
+        browser: 'safari'
+
     - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=preview safari_webdriver infrastructure/
       displayName: 'Run infrastructure/ tests (Safari Technology Preview)'
