@@ -46,5 +46,6 @@ jobs:
   - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=nightly firefox infrastructure/
     displayName: 'Run infrastructure/ tests (Firefox Nightly)'
 
-  - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=preview safari_webdriver infrastructure/
-    displayName: 'Run infrastructure/ tests (Safari Technology Preview)'
+  - {{ if eq(parameters.os, 'macOS') }}:
+    - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=preview safari_webdriver infrastructure/
+      displayName: 'Run infrastructure/ tests (Safari Technology Preview)'
