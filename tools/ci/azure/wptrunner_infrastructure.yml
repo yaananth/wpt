@@ -38,7 +38,8 @@ jobs:
     parameters:
       os: ${{ parameters.os }}
 
-  - template: update_manifest.yml
+  - script: ./wpt manifest
+    displayName: 'Update manifest'
 
   - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=dev chrome infrastructure/
     displayName: 'Run infrastructure/ tests (Chrome Dev)'
