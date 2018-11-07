@@ -6,11 +6,13 @@ parameters:
 jobs:
 - job: 'infrastructure_${{ parameters.os }}'
   displayName: 'infrastructure/ (${{ parameters.os }})'
-  dependsOn: ${{ parameters.dependsOn }}
-  condition: ${{ parameters.condition }}
+  dependsOn: decision
+  condition: dependencies.decision.outputs['jobs.tools_unittest']
   pool:
-    ${{ if eq(parameters.os, macOS) }}:
+    ${{ if eq(parameters.os, 'macOS') }}:
       vmImage: 'macOS-10.13'
+    ${{ if eq(parameters.os, 'Linux') }}:
+      vmImage: 'ubuntu-16.04'
   steps:
   - checkout: self
     fetchDepth: 50

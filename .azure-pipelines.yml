@@ -30,5 +30,3 @@ jobs:
 - template: tools/ci/azure/wptrunner_infrastructure.yml
   parameters:
     os: macOS
-    dependsOn: decision
-    condition: dependencies.decision.outputs['jobs.tools_unittest']
