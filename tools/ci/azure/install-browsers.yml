@@ -6,11 +6,11 @@ parameters:
 steps:
 - script: HOMEBREW_NO_AUTO_UPDATE=1 brew cask install Homebrew/homebrew-cask-versions/google-chrome-dev
   displayName: 'Install Chrome Dev'
-  condition: eq(parameters.chrome, 'true')
+  condition: ${{ parameters.chrome }}
 
 - script: HOMEBREW_NO_AUTO_UPDATE=1 brew cask install Homebrew/homebrew-cask-versions/firefox-nightly
   displayName: 'Install Firefox Nightly'
-  condition: eq(parameters.firefox, 'true')
+  condition: ${{ parameters.firefox }}
 
 - script: |
     # Pin to STP 67, as SafariDriver isn't working in 68:
@@ -20,4 +20,4 @@ steps:
     sudo "/Applications/Safari Technology Preview.app/Contents/MacOS/safaridriver" --enable
     defaults write com.apple.Safari WebKitJavaScriptCanOpenWindowsAutomatically 1
   displayName: 'Install Safari Technology Preview'
-  condition: eq(parameters.safari, 'true')
+  condition: ${{ parameters.safari }}
