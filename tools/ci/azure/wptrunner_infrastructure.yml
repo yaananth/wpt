@@ -45,7 +45,7 @@ jobs:
       browser: 'chrome'
       
   - ${{ if eq(parameters.os, 'Linux') }}:
-    - script: xvfb-run ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=dev chrome infrastructure/
+    - script: xvfb-run ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --install-fonts --channel=dev chrome infrastructure/
       displayName: 'Run infrastructure/ tests (Chrome Dev)'
 
   - ${{ if eq(parameters.os, 'macOS') }}:
@@ -58,7 +58,7 @@ jobs:
       browser: 'firefox'
 
   - ${{ if eq(parameters.os, 'Linux') }}:
-    - script: xvfb-run ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=nightly firefox infrastructure/
+    - script: xvfb-run ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --install-fonts --channel=nightly firefox infrastructure/
       displayName: 'Run infrastructure/ tests (Firefox Nightly)'
 
   - ${{ if eq(parameters.os, 'macOS') }}:
