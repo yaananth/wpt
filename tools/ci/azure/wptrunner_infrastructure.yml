@@ -20,9 +20,6 @@ jobs:
     - script: sudo apt-get install xvfb
       displayName: 'Install Xvfb'
 
-    - script: Xvfb :99 &
-      displayName: 'Start Xvfb'
-
   - template: install_virtualenv.yml
     parameters:
       os: ${{ parameters.os }}
@@ -46,17 +43,27 @@ jobs:
     parameters:
       os: ${{ parameters.os }}
       browser: 'chrome'
+      
+  - ${{ if eq(parameters.os, 'Linux') }}:
+    - script: xvfb-run ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=dev chrome infrastructure/
+      displayName: 'Run infrastructure/ tests (Chrome Dev)'
 
-  - script: DISPLAY=:99.0 no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=dev chrome infrastructure/
-    displayName: 'Run infrastructure/ tests (Chrome Dev)'
-
+  - ${{ if eq(parameters.os, 'macOS') }}:
+    - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=dev chrome infrastructure/
+      displayName: 'Run infrastructure/ tests (Chrome Dev)'
+  
   - template: install_browser.yml
     parameters:
       os: ${{ parameters.os }}
       browser: 'firefox'
 
-  - script: DISPLAY=:99.0 no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=nightly firefox infrastructure/
-    displayName: 'Run infrastructure/ tests (Firefox Nightly)'
+  - ${{ if eq(parameters.os, 'Linux') }}:
+    - script: xvfb-run ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=nightly firefox infrastructure/
+      displayName: 'Run infrastructure/ tests (Firefox Nightly)'
+
+  - ${{ if eq(parameters.os, 'macOS') }}:
+      - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=nightly firefox infrastructure/
+      displayName: 'Run infrastructure/ tests (Firefox Nightly)'
 
   - ${{ if eq(parameters.os, 'macOS') }}:
     - template: install_browser.yml
