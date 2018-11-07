@@ -3,7 +3,13 @@ parameters:
   browser: ''
 
 steps:
-# TODO: Linux
+- ${{ if eq(parameters.os, 'Linux') }}:
+  - ${{ if eq(parameters.browser, 'chrome') }}:
+    - script: |
+        source tools/ci/lib.sh
+        install_chrome unstable
+      displayName: 'Install Chrome Dev'
+
 - ${{ if eq(parameters.os, 'macOS') }}:
   - ${{ if eq(parameters.browser, 'chrome') }}:
     - script: HOMEBREW_NO_AUTO_UPDATE=1 brew cask install Homebrew/homebrew-cask-versions/google-chrome-dev
