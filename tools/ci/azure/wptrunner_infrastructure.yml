@@ -17,6 +17,11 @@ jobs:
     submodules: false
 
   - ${{ if eq(parameters.os, 'Linux') }}:
+    - script: |
+        sudo apt-get install xvfb
+        dpkg -L xvfb
+      displayName: 'Install Xvfb'
+
     - script: sh -e /etc/init.d/xvfb start 1>&2
       displayName: 'Start Xvfb'
 
