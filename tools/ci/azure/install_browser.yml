@@ -5,15 +5,15 @@ parameters:
 steps:
 # TODO: Linux
 - ${{ if eq(parameters.os, 'macOS') }}:
-  - ${{ if eq(parameters.browser, 'chrome')) }}:
+  - ${{ if eq(parameters.browser, 'chrome') }}:
     - script: HOMEBREW_NO_AUTO_UPDATE=1 brew cask install Homebrew/homebrew-cask-versions/google-chrome-dev
       displayName: 'Install Chrome Dev'
 
-  - ${{ if eq(parameters.browser, 'firefox')) }}:
+  - ${{ if eq(parameters.browser, 'firefox') }}:
     - script: HOMEBREW_NO_AUTO_UPDATE=1 brew cask install Homebrew/homebrew-cask-versions/firefox-nightly
       displayName: 'Install Firefox Nightly'
 
-  - ${{ if eq(parameters.browser, 'safari')) }}:
+  - ${{ if eq(parameters.browser, 'safari') }}:
     - script: |
         # Pin to STP 67, as SafariDriver isn't working in 68:
         # https://github.com/web-platform-tests/wpt/issues/13800
