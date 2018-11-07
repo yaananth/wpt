@@ -29,7 +29,6 @@ jobs:
 
 - template: tools/ci/azure/wptrunner_infrastructure.yml
   parameters:
-    name: infrastructure_macOS
-    vmImage: 'macOS-10.13'
+    os: macOS
     dependsOn: decision
     condition: dependencies.decision.outputs['jobs.tools_unittest']

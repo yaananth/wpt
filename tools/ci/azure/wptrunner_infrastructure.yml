@@ -1,17 +1,16 @@
 parameters:
-  name: ''
-  vmImage: ''
-  displayName: ''
+  os: ''
   dependsOn: ''
   condition: ''
 
 jobs:
-- job: ${{ parameters.name }}
-  displayName: ${{ parameters.displayName }}
+- job: 'infrastructure_${{ parameters.os }}'
+  displayName: 'infrastructure/ (${{ parameters.os }})'
   dependsOn: ${{ parameters.dependsOn }}
   condition: ${{ parameters.condition }}
   pool:
-    vmImage: ${{ parameters.vmImage }}
+    ${{ if eq(parameters.os, macOS) }}:
+      vmImage: 'macOS-10.13'
   steps:
   - checkout: self
     fetchDepth: 50
@@ -19,13 +18,21 @@ jobs:
 
   - script: |
       sudo easy_install pip
-      pip install --user tox virtualenv
+      pip install --user virtualenv
       echo "##vso[task.prependpath]$HOME/Library/Python/2.7/bin"
     displayName: 'Install Python packages'
 
   - template: install_browsers.yml
+    parameters:
+      os: ${{ parameters.os }}
+
   - template: install_certs.yml
+    parameters:
+      os: ${{ parameters.os }}
+
   - template: install_fonts.yml
+    parameters:
+      os: ${{ parameters.os }}
 
   - script: ./wpt make-hosts-file | sudo tee -a /etc/hosts
     displayName: 'Update /etc/hosts'

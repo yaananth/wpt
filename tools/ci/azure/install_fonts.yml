@@ -1,3 +1,6 @@
+parameters:
+  os: ''
+
 steps:
 # Installig Ahem in /Library/Fonts instead of using --install-fonts is a
 # workaround for https://github.com/web-platform-tests/wpt/issues/13803.
