@@ -29,4 +29,8 @@ jobs:
 
 - template: tools/ci/azure/wptrunner_infrastructure.yml
   parameters:
+    os: Linux
+
+- template: tools/ci/azure/wptrunner_infrastructure.yml
+  parameters:
     os: macOS
