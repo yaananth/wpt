@@ -51,7 +51,7 @@ jobs:
   - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=nightly firefox infrastructure/
     displayName: 'Run infrastructure/ tests (Firefox Nightly)'
 
-  - {{ if eq(parameters.os, 'macOS') }}:
+  - ${{ if eq(parameters.os, 'macOS') }}:
     - template: install_browser.yml
       parameters:
         os: ${{ parameters.os }}
