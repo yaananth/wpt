@@ -16,6 +16,10 @@ jobs:
     fetchDepth: 50
     submodules: false
 
+  - ${{ if eq(parameters.os, 'Linux') }}:
+    - script: sh -e /etc/init.d/xvfb start 1>&2
+      displayName: 'Start Xvfb'
+
   - template: install_virtualenv.yml
     parameters:
       os: ${{ parameters.os }}
@@ -40,7 +44,7 @@ jobs:
       os: ${{ parameters.os }}
       browser: 'chrome'
 
-  - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=dev chrome infrastructure/
+  - script: DISPLAY=:99.0 no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=dev chrome infrastructure/
     displayName: 'Run infrastructure/ tests (Chrome Dev)'
 
   - template: install_browser.yml
@@ -48,7 +52,7 @@ jobs:
       os: ${{ parameters.os }}
       browser: 'firefox'
 
-  - script: no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=nightly firefox infrastructure/
+  - script: DISPLAY=:99.0 no_proxy='*' ./wpt run --yes --no-manifest-update --manifest MANIFEST.json --metadata infrastructure/metadata/ --channel=nightly firefox infrastructure/
     displayName: 'Run infrastructure/ tests (Firefox Nightly)'
 
   - ${{ if eq(parameters.os, 'macOS') }}:
